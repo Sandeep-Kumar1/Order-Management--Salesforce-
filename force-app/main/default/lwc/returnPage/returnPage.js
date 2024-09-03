@@ -4,7 +4,8 @@ import createReturnRecord from '@salesforce/apex/GetOrdersHistoryByDynamicSoql.c
 
 
 export default class ReturnPage extends LightningElement {
-
+    
+    //all the variable are listed here 
     @api recordId;
     SelectedItem ;
     Comments ;
@@ -12,10 +13,9 @@ export default class ReturnPage extends LightningElement {
     recId ;
     amount;
     allData =[];
-    orderItemList = [
-        { label: 'Laptop', value: '3334343' }
-    ];
-    
+    orderItemList = [ ];
+   
+    //this method is auto called once component is rendered 
     connectedCallback(){
         getOrdersData({status : this.orderStatus , startDate : null, endDate : null, accId : this.recordId})
             .then(result =>{
@@ -35,17 +35,18 @@ export default class ReturnPage extends LightningElement {
             })
             .catch(error => {
                 console.log(JSON.stringify(error));
-            })
-
-            
+            })   
     }
     
+    //this mehtod called on when oncahnge event , and it assignes the vlaues to the vlariable with the name 
     getInputData(event){
         const {name, value} = event.target;
         this[name] = value;
     }
 
+    //method is called when form is submited 
     submitFrom(){
+        //iteraring over all data and fiding data based on itemId 
         for (let i = 0; i < this.allData.length; i++) {
             if (this.SelectedItem === this.allData[i].itemId) {
                 // Store the recId and amount
@@ -54,6 +55,7 @@ export default class ReturnPage extends LightningElement {
                 break;  // Exit loop after finding the match
             }
         }
+        //calling apex method for recrod creation 
         createReturnRecord({orderId : this.recId, orderItemId : this.SelectedItem, totalAmount : this.amount, comment : this.Comments})
             .then(result =>{
                 alert(result);
@@ -61,9 +63,10 @@ export default class ReturnPage extends LightningElement {
             .catch(error => {
                 console.log(JSON.stringify(error));
             })
+        //this mehtod will clear the form data 
         this.clear();
     }
-
+    // method for clearing the form data 
     clear(){
         this.SelectedItem = '' ;
         this.Comments = '' ;

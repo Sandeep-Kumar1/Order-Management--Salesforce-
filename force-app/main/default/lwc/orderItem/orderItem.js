@@ -13,6 +13,7 @@ export default class OrderItem extends LightningElement {
         tAmount : "",
         SelectedItem : ""
     }
+    // option for the combobox used to select the product category
     orderCategoryList =[   
         { label: 'Electronics & Gadgets', value: 'Electronics & Gadgets' },
         { label: 'Clothing & Apparel', value: 'Clothing & Apparel' },
@@ -31,6 +32,7 @@ export default class OrderItem extends LightningElement {
         this.OrderData[name] = value;
     }
 
+    // for reseting all the fields values in the form 
     reset(){
         this.OrderData.ProductName = "";
         this.OrderData.Price = "";
@@ -38,10 +40,11 @@ export default class OrderItem extends LightningElement {
         this.OrderData.SelectedItem = "";
     }
 
+    // on click of submit button this method will be executed 
     fromData(){
         let Amount = parseInt(this.OrderData.Price) * parseInt(this.OrderData.Quantity);
         this.OrderData.tAmount= Amount;
-        console.log(JSON.stringify(this.OrderData));
+        // apex createOrder mthod is calling 
         createOrder({allData : this.OrderData, AccountId : this.recordId})
             .then(result => {
                 alert (result );
@@ -50,7 +53,8 @@ export default class OrderItem extends LightningElement {
                 alert ('Error');
                 console.log(JSON.stringify(error));
             })
-       // window.location.reload();
+        // for refreshing all window 
+        window.location.reload();
         this.reset();
     }
 }

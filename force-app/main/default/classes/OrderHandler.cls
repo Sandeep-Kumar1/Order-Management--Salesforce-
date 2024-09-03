@@ -51,36 +51,51 @@ public with sharing class OrderHandler {
             return 'Record Created Sucessfully';
         }     
     }
+
+    //this method will send email if order status is shipped or delivered 
     public static void sendEmail(List<Order__c> orderList , Map<Id, Order__c> oldOrderList ){
 
         List<Order__c> toSendEmail = [SELECT Id, Owner.Email, Name, Customer_Name__r.Name FROM Order__c WHERE Id = :oldOrderList.keySet()];
 
-        List <Messaging.SingleEmailMessage> mailList = new List<Messaging.SingleEmailMessage>();
-
+        //list of Email to store all the emails for shipped status 
+        List <Messaging.SingleEmailMessage> shippedMailList = new List<Messaging.SingleEmailMessage>();
+        //list of Email to store all the emails for Delivered status 
+        List <Messaging.SingleEmailMessage> deliveredMailList = new List<Messaging.SingleEmailMessage>();
+        
+        //iteraring over the list of Order records 
         for (Order__c  order : toSendEmail ){
-
             if (order.status__c == 'Shipped' && oldOrderList.get(order.Id).status__c !='Shipped'){
-                mailList.add(sendEmailToOwner(order.Customer_Name__r.Name, order.Owner.Email, 'Shipped'));
+                //adding mails to shiped mail list
+                shippedMailList.add(sendEmailToOwner(order.Customer_Name__r.Name, order.Owner.Email, 'Shipped'));
             }
             if (order.status__c == 'Delivered' && oldOrderList.get(order.Id).status__c !='Delivered'){
-                mailList.add(sendEmailToOwner(order.Customer_Name__r.Name, order.Owner.Email, 'Delivered'));
+                //adding mails to delivered mail list
+                deliveredMailList.add(sendEmailToOwner(order.Customer_Name__r.Name, order.Owner.Email, 'Delivered'));
             }
         }
-        Messaging.sendEmail(mailList);
+        if (!shippedMailList.isEmpty()){
+            //seding emails in list
+            Messaging.sendEmail(shippedMailList);
+        }
+        if (!deliveredMailList.isEmpty()){
+            //seding emails in list
+            Messaging.sendEmail(deliveredMailList);
+        }
     }
-    // Method to send email which require there parameter name, email and term(Months)
+
+    // Method to send email which require there parameter name, email 
     public static Messaging.SingleEmailMessage sendEmailToOwner (String name , String email, String value){
 
         // creating new instance of mail type and adding all the required fields of that instance
         Messaging.SingleEmailMessage newMail = new Messaging.SingleEmailMessage();
-                newMail.setToAddresses(new List<String> {email,'sandeep.ttps@gmail.com'});
-                //newMail.setSubject('Regarding Renewal of your Contract');
-                String body = 'Hi, '+ name;
-                body += ' Your Order has be sucessfully' + value;    
-                newMail.setHtmlBody(body);
-                //newMail.setTemplateId('00XdM000003hZ9lUAE');
-                
-                //returining the generated mail 
-                Return newMail;
+        newMail.setToAddresses(new List<String> {email,'sandeep.ttps@gmail.com'});
+        //newMail.setSubject('Regarding Renewal of your Contract');
+        String body = 'Hi, '+ name;
+        body += ' Your Order has be sucessfully' + value;    
+        newMail.setHtmlBody(body);
+        //newMail.setTemplateId('00XdM000003hZ9lUAE');
+        
+        //returining the generated mail 
+        Return newMail;
     } 
 }

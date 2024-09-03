@@ -151,26 +151,34 @@ export default class OrderHisrotyLwc extends LightningElement {
         }
     }
 
-    // variable for open
+    // variable for open model component for return process
     isReturnFormOpen = false;
+
+    //save method 
     save(){
+        //iterarting over the Whole data finding the orderitem id 
         for (let i = 0; i < this.wholeValues.length; i++) {
             if (this.wholeValues[i].orderId === this.selectedProductId) {
                 if ( this.wholeValues[i].Status === 'Delivered'){
+                    //logic to create return will be added here 
                     alert('sucessfully Returned');
                 }else{
                     alert('this product can not be Returned');
                 }
             }
         }
+        // reassigning false value to close the model
         this.isReturnFormOpen = false;
     }
     openForm(event){
+        // reassigning true value for openeing the model
         this.isReturnFormOpen = true;
+        //getting the orderItem id form the dataset-id  
         this.selectedProductId = event.target.dataset.id
     }
 
     closeFrom(){
+        // reassigning false value to close the model
         this.isReturnFormOpen = false;
     }
 }
