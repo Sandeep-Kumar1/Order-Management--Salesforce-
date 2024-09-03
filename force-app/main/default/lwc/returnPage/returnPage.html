@@ -1,0 +1,16 @@
+<template >
+    <!-- <div class="slds-modal slds-fade-in-open" style="border: 2px,solid,red;">
+
+    </div> -->
+    <lightning-card>
+        <div class="slds-grid slds-grid_align-center" >
+                <strong> Return Request Form </strong>
+        </div>
+        <hr class=" slds-m-vertical_x-small">
+        <lightning-combobox class=" slds-m-horizontal_small" options={orderItemList} label="Select Order Item" name="SelectedItem" onchange={getInputData} value={SelectedItem}></lightning-combobox>
+        <lightning-textarea class=" slds-m-horizontal_small" label="Return Reason" onchange={getInputData} name="Comments" value={Comments} > </lightning-textarea>
+        <lightning-button class=" slds-grid slds-grid_align-center slds-m-top_medium" label="Submit" variant="brand" onclick={submitFrom}></lightning-button>
+    </lightning-card>
+</template>
+
+

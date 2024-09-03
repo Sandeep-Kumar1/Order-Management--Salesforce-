@@ -1,0 +1,81 @@
+<template>
+    <lightning-card title="Order History" icon-name="action:new_note" >
+        <hr>
+        <div class="slds-m-around_large" >
+            <div class="slds-grid slds-grid_align-center">
+                    <lightning-combobox class=" slds-col slds-size_3-of-12 slds-m-horizontal_small" name="status" options={statusOptn} onchange={getDataHndler} label="Order Status" value={status} required></lightning-combobox>
+                    <lightning-input class="slds-m-horizontal_small" label="Start Date" name="startDate" type="date" onchange={getDataHndler} required> </lightning-input>
+                    <lightning-input class=" slds-m-horizontal_small" label="End Date" name="endDate" type="date" onchange={getDataHndler} required> </lightning-input>
+            </div>  
+            <div class="slds-m-top_small">
+                <lightning-datatable key-field="orderId" data={orderdata} columns={columns} hide-checkbox-column onrowaction={openDetails}> </lightning-datatable>
+            </div>
+        </div>
+    </lightning-card>
+
+    <template if:true={isVisible}>
+        <div>
+            <hr>
+            <div class="slds-grid slds-grid_align-center">
+                <strong style="font-size: large; "><u>Order Detials </u></strong>
+            </div>
+            <div class="slds-grid slds-grid_vertical slds-m-top_medium" >
+                <template for:each={visibledata} for:item="order" >
+                    <Div key={order.itemId} class="slds-col slds-m-horizontal_large slds-m-top_medium slds-grid slds-gutters" style="border: 2px solid rgb(148, 148, 226); border-radius :5px">
+            
+                        <div class="slds-grid slds-wrap slds-p-around_large">
+                            <div class="slds-col slds-size_1-of-1 slds-text-align_center slds-m-bottom_medium" style="font-size: large;">
+                                <h2><strong>{order.Name}</strong></h2>
+                            </div>
+                            <div class="slds-col slds-size_1-of-2 slds-m-bottom_small">
+                                <p><strong>Order Id   :</strong> {order.orderName}</p>
+                            </div>
+                            <div class="slds-col slds-size_1-of-2 slds-m-bottom_small">
+                                <p><strong>Price   :</strong> {order.Price}</p>
+                            </div>
+                        
+                            <div class="slds-col slds-size_1-of-2 slds-m-bottom_small">
+                                <p><strong>Quantity   :</strong> {order.Quantity}</p>
+                            </div>
+                            <div class="slds-col slds-size_1-of-2 slds-m-bottom_small">
+                                <p><strong>Status   :</strong> {order.Status}</p>
+                            </div>
+                             
+                            <div class="slds-col slds-size_1-of-2 slds-m-bottom_small">
+                                <p><strong>Order Date   :</strong> {order.orderDate}</p>
+                            </div>
+                            <div class="slds-col slds-size_1-of-2 slds-m-bottom_small">
+                                <p><strong>Total Price   :</strong> {order.totalPrice}</p>
+                            </div>
+                        </div>
+                        <div class="slds-col slds-size_1-of-3 slds-grid_align-center slds-grid_vertical-align-center">
+                            <lightning-button label="Return" variant="brand" data-id={order.itemId} onclick={openForm}  ></lightning-button>
+                        </div>
+                    </Div>
+                </template>
+            </div>
+            <hr>
+            <div class="slds-grid slds-grid_align-center slds-m-top_large">
+                <H4><strong>Grand Total    : {grandTotal}  </strong></u></H4>
+            </div>
+        </div>
+    </template>
+    <template if:true={isReturnFormOpen}>
+        <section class="slds-modal slds-fade-in-open">
+            <div class="slds-modal__container">
+                <header class="slds-modal__header">
+                    <lightning-button-icon icon-name="utility:close" alternative-text="close" title="Close" onclick={closeFrom} class="slds-modal__close"></lightning-button-icon>
+                    <h2 class="slds-text-heading_medium">Return Form</h2>
+                </header>
+                <div class="slds-modal__content slds-p-around_medium">
+                    <lightning-textarea class=" slds-m-horizontal_small" label="Return Reason" onchange={getDataHndler} name="comment" value={comment} > </lightning-textarea>
+                </div>
+                <footer class="slds-modal__footer">
+                    <lightning-button variant="neutral" label="Cancel" onclick={closeFrom}></lightning-button>
+                    <lightning-button variant="brand" label="Save" onclick={save}></lightning-button>
+                </footer>
+            </div>
+        </section>
+        <div class="slds-backdrop slds-backdrop_open"></div>
+    </template>
+</template>

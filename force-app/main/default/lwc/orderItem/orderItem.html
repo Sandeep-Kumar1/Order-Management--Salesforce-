@@ -1,0 +1,17 @@
+<template>
+    <lightning-card title="Create Order" icon-name="custom:custom11" >
+        <div class="slds-m-around_medium">
+            <lightning-input type="text" label="Product Name" name="ProductName" onchange={getFromData} value={OrderData.ProductName}> </lightning-input>
+            <lightning-combobox  options={orderCategoryList} label="Order Category" name="SelectedItem" onchange={getFromData} value={OrderData.SelectedItem}></lightning-combobox>
+            <div class="slds-grid slds-gutters">
+                <lightning-input type="number" label="Price" name="Price" onchange={getFromData} class="slds-col" value={OrderData.Price}> </lightning-input>
+                <lightning-input type="number" label="Quantity" name="Quantity" onchange={getFromData} class="slds-col" value={OrderData.Quantity}> </lightning-input>
+            </div>
+            <div class="slds-grid slds-grid_align-center slds-m-top_medium ">
+                <lightning-button label="Reset" onclick={reset}></lightning-button>
+                <lightning-button label="Confirm" class="slds-m-left_medium" onclick={fromData}></lightning-button>
+            </div>
+        </div>
+    </lightning-card>
+</template>
+
